@@ -21,9 +21,9 @@ ingredients_list = st.multiselect(
     max_selections=5
 )
 
-    if ingredients_list:
+if ingredients_list:
     ingredients_string = ''
-        for fruit_choosen in ingredients_list:
+    for fruit_choosen in ingredients_list:
         ingredients_string += fruit_choosen + ' '
     
     my_insert_stmt = f"""INSERT INTO smoothies.public.orders(ingredients, name_on_order)
@@ -31,10 +31,8 @@ ingredients_list = st.multiselect(
     
     time_to_insert = st.button('Submit Order')
 
-
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-st.text(fruityvice_response)
-
     if time_to_insert:
         session.sql(my_insert_stmt).collect()
         st.success('Your Smoothie Order has been placed!', icon="✅")
+fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+st.text(fruityvice_response)
