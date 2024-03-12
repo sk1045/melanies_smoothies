@@ -12,7 +12,7 @@ st.write('The name on your smoothie will be:', name_on_order)
 
 from snowflake.snowpark.functions import col
 
-cnx = st.connection("snowflake")
+cnx = get_active_session()
 session = cnx.session()
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
 
@@ -22,22 +22,19 @@ ingredients_list = st.multiselect(
     max_selections=5
 )
 
-    if ingredients_list:
+if ingredients_list:
     ingredients_string = ''
-    
-
-    for fruit_choosen in ingredients_list:
-        ingredients_string += fruit_choosen + ' '
+    for fruit_chosen in ingredients_list:
+        ingredients_string += fruit_chosen + ' '
     
     my_insert_stmt = f"""INSERT INTO smoothies.public.orders(ingredients, name_on_order)
                         VALUES ('{ingredients_string}', '{name_on_order}')"""
     
     time_to_insert = st.button('Submit Order')
 
-
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-st.text(fruityvice_response)
-
     if time_to_insert:
         session.sql(my_insert_stmt).collect()
         st.success('Your Smoothie Order has been placed!', icon="✅")
+
+fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+st.text(fruityvice_response.text)
