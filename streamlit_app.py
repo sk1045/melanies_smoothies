@@ -22,7 +22,7 @@ ingredients_list = st.multiselect(
     max_selections=5
 )
 
-if ingredients_list:
+    if ingredients_list:
     ingredients_string = ''
     
 
